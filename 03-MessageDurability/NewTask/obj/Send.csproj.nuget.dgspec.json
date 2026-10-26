@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "/home/carlos/projects/FirstRabbitMQProject/03-MessageDurability/Send/Send.csproj": {}
+    "/home/carlos/projects/FirstRabbitMQProject/03-MessageDurability/NewTask/Send.csproj": {}
   },
   "projects": {
-    "/home/carlos/projects/FirstRabbitMQProject/03-MessageDurability/Send/Send.csproj": {
+    "/home/carlos/projects/FirstRabbitMQProject/03-MessageDurability/NewTask/Send.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/home/carlos/projects/FirstRabbitMQProject/03-MessageDurability/Send/Send.csproj",
+        "projectUniqueName": "/home/carlos/projects/FirstRabbitMQProject/03-MessageDurability/NewTask/Send.csproj",
         "projectName": "Send",
-        "projectPath": "/home/carlos/projects/FirstRabbitMQProject/03-MessageDurability/Send/Send.csproj",
+        "projectPath": "/home/carlos/projects/FirstRabbitMQProject/03-MessageDurability/NewTask/Send.csproj",
         "packagesPath": "/home/carlos/.nuget/packages/",
-        "outputPath": "/home/carlos/projects/FirstRabbitMQProject/03-MessageDurability/Send/obj/",
+        "outputPath": "/home/carlos/projects/FirstRabbitMQProject/03-MessageDurability/NewTask/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "/home/carlos/.nuget/NuGet/NuGet.Config"
