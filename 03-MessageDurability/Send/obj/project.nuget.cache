@@ -1,0 +1,11 @@
+{
+  "version": 2,
+  "dgSpecHash": "Z7nEH7yUmWg=",
+  "success": true,
+  "projectFilePath": "/home/carlos/projects/FirstRabbitMQProject/03-MessageDurability/Send/Send.csproj",
+  "expectedPackageFiles": [
+    "/home/carlos/.nuget/packages/rabbitmq.client/7.2.2/rabbitmq.client.7.2.2.nupkg.sha512",
+    "/home/carlos/.nuget/packages/system.threading.ratelimiting/8.0.0/system.threading.ratelimiting.8.0.0.nupkg.sha512"
+  ],
+  "logs": []
+}

@@ -1,0 +1,21 @@
+services:
+  rabbitmq:
+    image: rabbitmq:4-management
+    container_name: rabbitmq-learning
+    hostname: rabbitmq
+
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+
+    environment:
+      RABBITMQ_DEFAULT_USER: app
+      RABBITMQ_DEFAULT_PASS: senha_dev_123
+
+    volumes:
+      - rabbitmq_data:/var/lib/rabbitmq
+
+    restart: no
+
+volumes:
+  rabbitmq_data:
