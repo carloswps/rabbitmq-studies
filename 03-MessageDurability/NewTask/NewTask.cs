@@ -8,33 +8,45 @@ var factory = new ConnectionFactory
     UserName = "app",
     Password = "senha_dev_123",
 };
+
 using var connection = await factory.CreateConnectionAsync();
 using var channel = await connection.CreateChannelAsync();
 
+const string queueName = "task_queue";
+
 await channel.QueueDeclareAsync(
-    queue: "task_queue",
+    queue: queueName,
     durable: true,
     exclusive: false,
     autoDelete: false,
     arguments: new Dictionary<string, object?> { { "x-queue-type", "quorum" } }
 );
 
-var message = GetMessage(args);
-var body = Encoding.UTF8.GetBytes(message);
+Console.WriteLine("Digite uma mensagem ou 'sair' para encerrar.");
 
-var properties = new BasicProperties { Persistent = true };
-
-await channel.BasicPublishAsync(
-    exchange: string.Empty,
-    routingKey: "task_queue",
-    mandatory: true,
-    basicProperties: properties,
-    body: body
-);
-
-Console.WriteLine($" [x] Sent {message}");
-
-static string GetMessage(string[] args)
+while (true)
 {
-    return ((args.Length > 0) ? string.Join(" ", args) : "Hello World");
+    Console.Write("Mensagem: ");
+    var message = Console.ReadLine();
+    if (string.IsNullOrWhiteSpace(message))
+        continue;
+
+    if (message.Equals("sair", StringComparison.OrdinalIgnoreCase))
+        break;
+
+    var properties = new BasicProperties { Persistent = true };
+
+    var body = Encoding.UTF8.GetBytes(message);
+
+    await channel.BasicPublishAsync(
+        exchange: string.Empty,
+        routingKey: "task_queue",
+        mandatory: true,
+        basicProperties: properties,
+        body: body
+    );
+
+    var correlationId = Guid.NewGuid().ToString();
+
+    var tcs = new TaskCompletionSource<string>(TaskCreationOptions.RunContinuationsAsynchronously);
 }

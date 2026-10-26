@@ -34,8 +34,6 @@ consumer.ReceivedAsync += async (model, ea) =>
     int docs = message.Split('.').Length - 1;
     await Task.Delay(docs * 1000);
 
-    Console.WriteLine(" [x] Done");
-
     await channel.BasicAckAsync(deliveryTag: ea.DeliveryTag, multiple: false);
 };
 
