@@ -4,7 +4,7 @@ using RabbitMQ.Client.Events;
 
 var factory = new ConnectionFactory
 {
-    HostName = "localhot",
+    HostName = "localhost",
     Port = 5672,
     UserName = "app",
     Password = "senha_dev_123",

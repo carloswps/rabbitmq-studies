@@ -12,20 +12,57 @@ var factory = new ConnectionFactory
 using var connection = await factory.CreateConnectionAsync();
 using var channel = await connection.CreateChannelAsync();
 
-const string exchangeName = "app.direct";
-const string routingKey = "order.created";
+channel.BasicReturnAsync += (sender, ea) =>
+{
+    var returnedMessage = Encoding.UTF8.GetString(ea.Body.ToArray());
 
-await channel.ExchangeDeclareAsync(
-    exchange: exchangeName,
-    type: ExchangeType.Direct,
-    durable: true
+    Console.WriteLine("\n[!] ERROR: message not routed!");
+    Console.WriteLine($"    Reason: {ea.ReplyText}");
+    Console.WriteLine($"    Key: {ea.RoutingKey}");
+    Console.WriteLine($"    Message: {returnedMessage}");
+
+    return Task.CompletedTask;
+};
+
+const string queueName = "task_queue";
+
+await channel.QueueDeclareAsync(
+    queue: queueName,
+    durable: true,
+    exclusive: false,
+    autoDelete: false,
+    arguments: new Dictionary<string, object?> { { "x-queue-type", "quorum" } }
 );
 
-string message = "Order #123 created";
-byte[] body = Encoding.UTF8.GetBytes(message);
+while (true)
+{
+    Console.Write("Mensagem: ");
+    var message = Console.ReadLine();
+    if (string.IsNullOrWhiteSpace(message))
+        continue;
 
-await channel.BasicPublishAsync(exchange: exchangeName, routingKey: routingKey, body: body);
+    if (message.Equals("sair", StringComparison.OrdinalIgnoreCase))
+        break;
 
-Console.WriteLine($"Message send: {message}");
-Console.WriteLine($"Exchange: {exchangeName}");
-Console.WriteLine($"Routing key: {routingKey}");
+    var properties = new BasicProperties { Persistent = true };
+
+    var body = Encoding.UTF8.GetBytes(message);
+    /*
+     await channel.BasicPublishAsync(
+         exchange: string.Empty,
+         routingKey: "incorrect_routing_key",
+         mandatory: true,
+         basicProperties: properties,
+         body: body
+     ); */
+
+    await channel.BasicPublishAsync(
+        exchange: "app.direct",
+        routingKey: "order.created",
+        mandatory: true,
+        basicProperties: properties,
+        body: body
+    );
+
+    Console.WriteLine("Publicação enviada ao RabbitMQ.");
+}
