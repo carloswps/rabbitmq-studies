@@ -20,5 +20,20 @@ var message = (args.Length > 1) ? string.Join(" ", args.Skip(1).ToArray()) : "He
 
 var body = Encoding.UTF8.GetBytes(message);
 
-await channel.BasicPublishAsync(exchange: "topic_logs", routingKey: routingKey, body: body);
+channel.BasicReturnAsync += (sender, ea) =>
+{
+    var message = Encoding.UTF8.GetString(ea.Body.ToArray());
+
+    Console.WriteLine($" Message not routing: '{ea.RoutingKey}':{message}'");
+
+    return Task.CompletedTask;
+};
+
+/* await channel.BasicPublishAsync(exchange: "topic_logs", routingKey: routingKey, body: body); */
+await channel.BasicPublishAsync(
+    exchange: "topic_logs",
+    routingKey: routingKey,
+    mandatory: true,
+    body: body
+);
 Console.WriteLine($" [x] Sent '{routingKey}':'{message}'");
